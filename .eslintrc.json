@@ -19,8 +19,9 @@
     ],
     "rules": {
       "semi": [2, "always"],
-      // "semi": "off",
-      // "semi": "off",
-      "@typescript-eslint/semi": [2, "always"]
+      "@typescript-eslint/semi": [2, "always"],
+      "@typescript-eslint/promise-function-async": 0,
+      "@typescript-eslint/prefer-optional-chain": 0,
+      "@typescript-eslint/strict-boolean-expressions": 0
     }
 }
