@@ -1,6 +1,7 @@
 .App {
   padding: 30px;
 }
+
 #customers {
   font-family: Arial, Helvetica, sans-serif;
   border-collapse: collapse;
@@ -9,7 +10,6 @@
 }
 
 #customers td, #customers th {
-  /* border: 1px solid #ddd; */
   padding: 8px;
   text-align: center;
 }
@@ -17,14 +17,14 @@
 #customers th {
   padding-top: 12px;
   padding-bottom: 12px;
-  /* background-color: #965dcb; */
   color: rgb(0, 0, 0);
 }
 
 .photo {
-  max-width: 100%; 
+  display: block;
   height: auto; 
   width: auto;
+  max-width: 100%;
 }
 
 .id {
