@@ -1,68 +1,30 @@
-/* eslint-disable array-callback-return */
-import React, { useEffect, useState } from 'react';
-import { getAllProducts } from './api/fetchProducts';
-import classNames from 'classnames';
+import React from 'react';
 import './App.css';
-import { useAppDispatch, useAppSelector } from './app/hooks';
-import { set } from './features/products/productsSlice';
+import { useFormik } from 'formik';
+import { basicSchema } from './schemas';
+import { ProductList } from './components/ProductsList/ProductList';
+import classNames from 'classnames';
 
 const App: React.FC = () => {
-  const [query, setQuery] = useState('');
-  const [
-    selectedCategories, setSelectedCategories
-  ] = useState<string[]>([]);
-
-  const dispatch = useAppDispatch();
-  const { products } = useAppSelector(state => state.products);
-
-  const categories: string[] = [];
-
-  products.map(product => {
-    if (categories.includes(product.category)) {
-      return;
-    }
-
-    return categories.push(product.category);
-  });
-
-  const onSelectCategoryFilter = (category: string): void => {
-    setSelectedCategories((prev) => {
-      if (prev.includes(category)) {
-        return prev.filter(el => el !== category);
-      }
-
-      return [...prev, category];
-    });
+  const onSubmit: () => void = () => {
+    console.log('submitted');
   };
 
-  const visibleProducts = products.filter(product => {
-    const normalizedTitle = product.title.toLowerCase();
-    const normalizedCategory = product.category.toLowerCase();
-    const normalizedQuery = query.toLowerCase().trim();
-
-    const isQueryTitleMatch = query
-      ? normalizedTitle.includes(normalizedQuery)
-      : true;
-
-    const isQueryCategoryMatch = query
-      ? normalizedCategory.includes(normalizedQuery)
-      : true;
-
-    const isCategoriesMatch = selectedCategories.length
-      ? selectedCategories.includes(product.category)
-      : true;
-
-    return (isQueryTitleMatch || isQueryCategoryMatch) && isCategoriesMatch;
+  const { values, handleChange, handleSubmit, handleBlur, touched, errors } = useFormik({
+    initialValues: {
+      title: '',
+      description: '',
+      price: '',
+      thumbnail: '',
+      rating: '',
+      stock: '',
+      category: ''
+    },
+    validationSchema: basicSchema,
+    onSubmit
   });
 
-  useEffect(() => {
-    getAllProducts()
-      .then(res => {
-        dispatch(set(res.products));
-        console.log(res.products);
-      })
-      .catch(error => error);
-  }, []);
+  console.log(errors);
 
   return (
     <div className="App">
@@ -70,110 +32,177 @@ const App: React.FC = () => {
       </header>
 
       <div className="content">
-        <div className="products">
-          <input
-            type="text"
-            className="input"
-            placeholder="Search"
-            value={query}
-            onChange={(event) => {
-              setQuery(event.target.value);
-            }}
-          />
-
-          <div className="is-flex-wrap-wrap">
-            <a
-              href="#/"
-              className={classNames(
-                'button is-success mr-6 my-1',
-                { 'is-outlined': selectedCategories.length > 0 }
-              )}
-              onClick={() => {
-                setSelectedCategories([]);
-              }}
-            >
-              All
-            </a>
-
-            {categories.map(category => (
-              <a
-                key={category}
-                className={classNames(
-                  'button mr-2 my-1',
-                  {
-                    'is-info': selectedCategories.includes(category)
-                  }
-                )}
-                href="#/"
-                onClick={() => {
-                  onSelectCategoryFilter(category);
-                }}
-              >
-                {category}
-              </a>
-            ))}
-          </div>
-
-          <div className="box table-container">
-            <table id="customers" className="table is-striped is-narrow is-fullwidth">
-              <thead>
-                <tr>
-                  <th>
-                    <span className="is-flex is-flex-wrap-nowrap is-justify-content-center">
-                      <div className="is-inline">📎ID</div>
-                      <a href="#/">
-                        <span className="icon">
-                          <i className="fas fa-sort"></i>
-                        </span>
-                      </a>
-                    </span>
-                  </th>
-                  <th>
-                    <span className="is-flex is-flex-wrap-nowrap is-justify-content-center">
-                      📌Name
-                      <a href="#/">
-                        <span className="icon">
-                          <i className="fas fa-sort"></i>
-                        </span>
-                      </a>
-                    </span>
-                  </th>
-                  <th>📋Description</th>
-                  <th>💸Price</th>
-                  <th>📷Photo</th>
-                  <th>✨Rating</th>
-                  <th>🛒Stock</th>
-                  <th>🔍Category</th>
-                </tr>
-              </thead>
-              <tbody>
-                {visibleProducts.length > 0 && visibleProducts.map(product => (
-                  <tr key={product.id}>
-                    <td className="has-text-weight-bold">{product.id}</td>
-                    <td className="has-text-link has-text-weight-bold is-clickable">{product.title}</td>
-                    <td className="descripton">{product.description}</td>
-                    <td>{product.price}</td>
-                    <td>
-                      <img
-                        src={product.thumbnail}
-                        alt={product.title}
-                        className="photo"
-                      />
-                    </td>
-                    <td>{product.rating}</td>
-                    <td>{product.stock}</td>
-                    <td>{product.category}</td>
-                  </tr>
-                ))
-                }
-              </tbody>
-            </table>
-          </div>
-        </div>
+        <ProductList />
 
         <div className="add">
           <div className="box">
             <h2>Add new product</h2>
+
+            <form
+              onSubmit={handleSubmit}>
+              <div className="field">
+                <label className="label">Title</label>
+                <div className="control">
+                  <input
+                    className={classNames(
+                      'input',
+                      { 'is-danger': errors.title && touched.title }
+                    )}
+                    type="text"
+                    name="title"
+                    value={values.title}
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                  />
+                </div>
+                {(errors.title && touched.title) && (
+                  <p className="help is-danger">
+                    {errors.title}
+                  </p>
+                )}
+              </div>
+
+              <div className="field">
+                <label className="label">Description</label>
+                <div className="control">
+                  <input
+                    className={classNames(
+                      'input',
+                      { 'is-danger': errors.description && touched.description }
+                    )}
+                    type="text"
+                    name="description"
+                    value={values.description}
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                  />
+                </div>
+                {(errors.description && touched.description) && (
+                  <p className="help is-danger">
+                    {errors.description}
+                  </p>
+                )}
+              </div>
+
+              <div className="field">
+                <label className="label">Price</label>
+                <div className="control">
+                  <input
+                    className={classNames(
+                      'input',
+                      { 'is-danger': errors.price && touched.price }
+                    )}
+                    type="number"
+                    name="price"
+                    value={values.price}
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                  />
+                </div>
+                {(errors.price && touched.price) && (
+                  <p className="help is-danger">
+                    {errors.price}
+                  </p>
+                )}
+              </div>
+
+              <div className="field">
+                <label className="label">Thumbnail</label>
+                <div className="control">
+                  <input
+                    className={classNames(
+                      'input',
+                      { 'is-danger': errors.thumbnail && touched.thumbnail }
+                    )}
+                    type="text"
+                    name="thumbnail"
+                    value={values.thumbnail}
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                  />
+                </div>
+                {(errors.thumbnail && touched.thumbnail) && (
+                  <p className="help is-danger">
+                    {errors.thumbnail}
+                  </p>
+                )}
+              </div>
+
+              <div className="field">
+                <label className="label">Rating</label>
+                <div className="control">
+                  <input
+                    className={classNames(
+                      'input',
+                      { 'is-danger': errors.rating && touched.rating }
+                    )}
+                    type="number"
+                    name="rating"
+                    value={values.rating}
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                  />
+                </div>
+                {(errors.rating && touched.rating) && (
+                  <p className="help is-danger">
+                    {errors.rating}
+                  </p>
+                )}
+              </div>
+
+              <div className="field">
+                <label className="label">Stock</label>
+                <div className="control">
+                  <input
+                    className={classNames(
+                      'input',
+                      { 'is-danger': errors.stock && touched.stock }
+                    )}
+                    type="number"
+                    name="stock"
+                    value={values.stock}
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                  />
+                </div>
+                {(errors.stock && touched.stock) && (
+                  <p className="help is-danger">
+                    {errors.stock}
+                  </p>
+                )}
+              </div>
+
+              <div className="field">
+                <label className="label">Category</label>
+                <div className="control">
+                  <input
+                    className={classNames(
+                      'input',
+                      { 'is-danger': errors.category && touched.category }
+                    )}
+                    type="text"
+                    name="category"
+                    value={values.category}
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                  />
+                </div>
+                {(errors.category && touched.category) && (
+                  <p className="help is-danger">
+                    {errors.category}
+                  </p>
+                )}
+              </div>
+
+              <div className="field has-text-centered">
+                <button
+                  type="submit"
+                  className="button is-link"
+                >
+                  Submit
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
