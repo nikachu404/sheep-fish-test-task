@@ -1,41 +1,25 @@
 .App {
   padding: 30px;
+} 
+
+.content {
+  display: flex;
+  flex-direction: row;
 }
 
-#customers {
-  font-family: Arial, Helvetica, sans-serif;
-  border-collapse: collapse;
-  table-layout: fixed;
-  width: 100%;
+.products {
+  width: 70%;
 }
+
+.add {
+  width: 30%;
+}
+
 
 #customers td, #customers th {
-  padding: 8px;
-  text-align: center;
-}
-
-#customers th {
-  padding-top: 12px;
-  padding-bottom: 12px;
-  color: rgb(0, 0, 0);
-}
-
-.photo {
-  display: block;
-  height: auto; 
-  width: auto;
-  max-width: 100%;
-}
-
-.id {
-  width: 50px;
+  text-align: center !important;
 }
 
 .descripton {
   text-align: left !important;
-}
-
-.icon {
-  height: 20px;
-  width: 20px;
 }
