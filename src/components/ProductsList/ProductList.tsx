@@ -8,6 +8,8 @@ import { set as setProductCategories } from '../../features/productCategoriesSli
 import { setUseEffectUsed } from '../../features/isUseEffectUsedSlice';
 import classNames from 'classnames';
 
+import './ProductList.scss';
+
 export const ProductList: React.FC = () => {
   const dispatch = useAppDispatch();
   const { products } = useAppSelector(state => state.products);
@@ -18,6 +20,8 @@ export const ProductList: React.FC = () => {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [sortType, setSortType] = useState('');
   const [sortOrder, setSortOrder] = useState('asc');
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const dataFetchedRef = useRef(false);
 
@@ -36,6 +40,8 @@ export const ProductList: React.FC = () => {
 
     dataFetchedRef.current = true;
 
+    setIsLoading(true);
+
     getProducts()
       .then(res => {
         dispatch(setProducts(res.products));
@@ -45,7 +51,10 @@ export const ProductList: React.FC = () => {
     getProductCategories().then(res => {
       dispatch(setProductCategories(res));
     })
-      .catch(error => error);
+      .catch(error => error)
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, [dispatch, useEffectUsed]);
 
   const onSelectCategoryFilter = (category: string): void => {
@@ -106,6 +115,17 @@ export const ProductList: React.FC = () => {
   return (
     <div className="page__products">
       <div className="field">
+        <h1
+        className="has-text-centered
+          has-text-light
+          is-size-3
+          has-text-weight-semibold"
+        >
+          Products page
+        </h1>
+      </div>
+
+      <div className="field">
         <input
           type="text"
           className="input"
@@ -151,126 +171,134 @@ export const ProductList: React.FC = () => {
         ))}
       </div>
 
-      <div className="box table-container">
-        <table className="table is-striped is-narrow is-fullwidth">
-          <thead>
-            <tr>
-              <th
-                className={classNames(
-                  { 'is-underlined': sortType === 'id' }
-                )}
-                onClick={() => {
-                  setSortType('id');
-                  setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
-                }}
-              >
-                Id{sortOrder === 'asc' ? '↑' : '↓'}
-              </th>
+      {isLoading
+        ? (
+          <div className="loader-wrapper is-centered">
+            <div className="loader"></div>
+          </div>
+          )
+        : (
+          <div className="box table-container">
+            <table className="table is-striped is-narrow is-fullwidth">
+              <thead>
+                <tr>
+                  <th
+                    className={classNames(
+                      { 'is-underlined': sortType === 'id' }
+                    )}
+                    onClick={() => {
+                      setSortType('id');
+                      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+                    }}
+                  >
+                    Id{sortOrder === 'asc' ? '↑' : '↓'}
+                  </th>
 
-              <th
-                className={classNames(
-                  { 'is-underlined': sortType === 'title' }
-                )}
-                onClick={() => {
-                  setSortType('title');
-                  setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
-                }}
-              >
-                Name{sortOrder === 'asc' ? '↑' : '↓'}
-              </th>
+                  <th
+                    className={classNames(
+                      { 'is-underlined': sortType === 'title' }
+                    )}
+                    onClick={() => {
+                      setSortType('title');
+                      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+                    }}
+                  >
+                    Name{sortOrder === 'asc' ? '↑' : '↓'}
+                  </th>
 
-              <th
-                className={classNames(
-                  { 'is-underlined': sortType === 'description' }
-                )}
-                onClick={() => {
-                  setSortType('description');
-                  setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
-                }}
-              >
-                Description{sortOrder === 'asc' ? '↑' : '↓'}
-              </th>
+                  <th
+                    className={classNames(
+                      { 'is-underlined': sortType === 'description' }
+                    )}
+                    onClick={() => {
+                      setSortType('description');
+                      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+                    }}
+                  >
+                    Description{sortOrder === 'asc' ? '↑' : '↓'}
+                  </th>
 
-              <th
-                className={classNames(
-                  { 'is-underlined': sortType === 'price' }
-                )}
-                onClick={() => {
-                  setSortType('price');
-                  setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
-                }}
-              >
-                Price{sortOrder === 'asc' ? '↑' : '↓'}
-              </th>
+                  <th
+                    className={classNames(
+                      { 'is-underlined': sortType === 'price' }
+                    )}
+                    onClick={() => {
+                      setSortType('price');
+                      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+                    }}
+                  >
+                    Price{sortOrder === 'asc' ? '↑' : '↓'}
+                  </th>
 
-              <th>Photo</th>
+                  <th>Photo</th>
 
-              <th
-                className={classNames(
-                  { 'is-underlined': sortType === 'rating' }
-                )}
-                onClick={() => {
-                  setSortType('rating');
-                  setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
-                }}
-              >
-                Rating{sortOrder === 'asc' ? '↑' : '↓'}
-              </th>
+                  <th
+                    className={classNames(
+                      { 'is-underlined': sortType === 'rating' }
+                    )}
+                    onClick={() => {
+                      setSortType('rating');
+                      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+                    }}
+                  >
+                    Rating{sortOrder === 'asc' ? '↑' : '↓'}
+                  </th>
 
-              <th
-                className={classNames(
-                  { 'is-underlined': sortType === 'stock' }
-                )}
-                onClick={() => {
-                  setSortType('stock');
-                  setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
-                }}
-              >
-                Stock{sortOrder === 'asc' ? '↑' : '↓'}
-              </th>
+                  <th
+                    className={classNames(
+                      { 'is-underlined': sortType === 'stock' }
+                    )}
+                    onClick={() => {
+                      setSortType('stock');
+                      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+                    }}
+                  >
+                    Stock{sortOrder === 'asc' ? '↑' : '↓'}
+                  </th>
 
-              <th
-                className={classNames(
-                  { 'is-underlined': sortType === 'category' }
-                )}
-                onClick={() => {
-                  setSortType('category');
-                  setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
-                }}
-              >
-                Category{sortOrder === 'asc' ? '↑' : '↓'}
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {visibleProducts.length > 0 && visibleProducts.map(product => (
-              <tr key={product.id}>
-                <td className="has-text-weight-bold is-vcentered">{product.id}</td>
-                <td className="has-text-link has-text-weight-bold is-clickable is-vcentered">{product.title}</td>
-                <td className="descripton is-vcentered">{product.description}</td>
-                <td className="is-vcentered">{product.price}</td>
-                <td>
-                  <img
-                    src={product.thumbnail}
-                    alt={product.title}
-                    className="photo"
-                  />
-                </td>
-                <td className="is-vcentered">{product.rating}</td>
-                <td className="is-vcentered">{product.stock}</td>
-                <td className="is-vcentered">{product.category}</td>
-                <td className="is-vcentered">
-                  <button
-                    className="delete"
-                    onClick={() => dispatch(takeProducts(product.id))}
-                  />
-                </td>
-              </tr>
-            ))
-            }
-          </tbody>
-        </table>
-      </div>
+                  <th
+                    className={classNames(
+                      { 'is-underlined': sortType === 'category' }
+                    )}
+                    onClick={() => {
+                      setSortType('category');
+                      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+                    }}
+                  >
+                    Category{sortOrder === 'asc' ? '↑' : '↓'}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {visibleProducts.length > 0 && visibleProducts.map(product => (
+                  <tr key={product.id}>
+                    <td className="has-text-weight-bold is-vcentered">{product.id}</td>
+                    <td className="has-text-link has-text-weight-bold is-clickable is-vcentered">{product.title}</td>
+                    <td className="descripton is-vcentered">{product.description}</td>
+                    <td className="is-vcentered">{product.price}</td>
+                    <td>
+                      <img
+                        src={product.thumbnail}
+                        alt={product.title}
+                        className="photo"
+                      />
+                    </td>
+                    <td className="is-vcentered">{product.rating}</td>
+                    <td className="is-vcentered">{product.stock}</td>
+                    <td className="is-vcentered">{product.category}</td>
+                    <td className="is-vcentered">
+                      <button
+                        className="delete"
+                        onClick={() => dispatch(takeProducts(product.id))}
+                      />
+                    </td>
+                  </tr>
+                ))
+                }
+              </tbody>
+            </table>
+          </div>
+          )}
     </div>
   );
 };

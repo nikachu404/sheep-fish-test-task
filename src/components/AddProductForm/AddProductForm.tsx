@@ -1,15 +1,25 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useFormik } from 'formik';
 import { basicSchema } from '../../schemas';
 import classNames from 'classnames';
-import { useAppDispatch } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { addProduct } from '../../api/fetchProducts';
 import { add } from '../../features/productsSlice';
+import { getProductCategories } from '../../api/fetchProductCategories';
+import { set as setProductCategories } from '../../features/productCategoriesSlice';
 
 export const AddProductForm: React.FC = () => {
   const dispatch = useAppDispatch();
+  const { categories } = useAppSelector(state => state.categories);
 
-  const onSubmit: () => void = () => {
+  useEffect(() => {
+    getProductCategories().then(res => {
+      dispatch(setProductCategories(res));
+    })
+      .catch(error => error);
+  }, []);
+
+  const onSubmit: (values: any, { resetForm }: { resetForm: () => void }) => void = (values, { resetForm }) => {
     const requestBody = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -27,6 +37,7 @@ export const AddProductForm: React.FC = () => {
     addProduct(requestBody)
       .then(newProduct => {
         dispatch(add(newProduct));
+        resetForm();
       })
       .catch(error => error);
   };
@@ -47,9 +58,20 @@ export const AddProductForm: React.FC = () => {
 
   return (
     <div className="page__add-form">
+      <div className="field">
+        <h1
+          className="
+          has-text-centered
+          has-text-light
+          is-size-3
+          has-text-weight-semibold"
+        >
+          Add new product
+        </h1>
+      </div>
+
       <div className="box">
-        <form
-          onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit}>
           <div className="field">
             <label className="label">Title</label>
             <div className="control">
@@ -184,18 +206,19 @@ export const AddProductForm: React.FC = () => {
 
           <div className="field">
             <label className="label">Category</label>
-            <div className="control">
-              <input
-                className={classNames(
-                  'input',
-                  { 'is-danger': errors.category && touched.category }
-                )}
-                type="text"
+            <div className="select is-fullwidth">
+              <select
                 name="category"
                 value={values.category}
                 onBlur={handleBlur}
                 onChange={handleChange}
-              />
+                required
+              >
+                <option hidden>Select category</option>
+                {categories.map(category => (
+                  <option key={category}>{category}</option>
+                ))}
+              </select>
             </div>
             {(errors.category && touched.category) && (
               <p className="help is-danger">
@@ -205,12 +228,19 @@ export const AddProductForm: React.FC = () => {
           </div>
 
           <div className="field has-text-centered">
-            <button
-              type="submit"
-              className="button is-link"
-            >
-              Submit
+            <button type="submit" className="button is-link">
+              Add product
             </button>
+
+            <article className="message is-success">
+              <div className="message-header">
+                <p>New product has been added!</p>
+                <button className="delete" aria-label="delete"></button>
+              </div>
+              <div className="message-body">
+                Go to the &quot;Products&quot; page to see the added product
+              </div>
+            </article>
           </div>
         </form>
       </div>
