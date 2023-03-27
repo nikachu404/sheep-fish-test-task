@@ -1,0 +1,20 @@
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+  padding: 5px 30px;
+
+  background-color: white;
+
+  &__logo {
+    width: 70px;
+    height: 70px;
+  }
+
+  &__nav-list {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+  }
+}

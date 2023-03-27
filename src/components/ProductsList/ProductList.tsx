@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable array-callback-return */
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
@@ -95,7 +96,7 @@ export const ProductList: React.FC = () => {
   }, [products, sortType, sortOrder, query, selectedCategories]);
 
   return (
-    <div className="products">
+    <div className="page__products">
       <input
         type="text"
         className="input"
@@ -106,12 +107,13 @@ export const ProductList: React.FC = () => {
         }}
       />
 
-      <div className="is-flex-wrap-wrap">
+      <div className="is-flex is-flex-wrap-wrap">
         <a
           href="#/"
           className={classNames(
-            'button is-success mr-6 my-1',
-            { 'is-outlined': selectedCategories.length > 0 }
+            'button mr-6 my-1',
+            { 'is-dark': selectedCategories.length > 0 },
+            { 'is-success': selectedCategories.length === 0 }
           )}
           onClick={() => {
             setSelectedCategories([]);
@@ -140,7 +142,7 @@ export const ProductList: React.FC = () => {
       </div>
 
       <div className="box table-container">
-        <table id="customers" className="table is-striped is-narrow is-fullwidth">
+        <table className="table is-striped is-narrow is-fullwidth">
           <thead>
             <tr>
               <th
