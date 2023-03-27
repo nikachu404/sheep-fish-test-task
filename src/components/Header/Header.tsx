@@ -1,22 +1,22 @@
 import React from 'react';
 import './Header.scss';
 import logo from '../../images/logo.png';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 export const Header: React.FC = () => {
   return (
     <header className="header">
       <img src={logo} alt="Logo" className="header__logo" />
-      <nav>
-        <ul className="header__nav-list">
-          <li className="is-size-4-desktop header__nav-item">
-            <Link to="/products" className="has-text-dark has-text-weight-semibold">Products</Link>
-          </li>
+      <nav className="navbar">
+        <div className="navbar-brand">
+          <NavLink to="/products" className="navbar-item has-text-dark has-text-weight-semibold">
+            Products
+          </NavLink>
 
-          <li className="is-size-4-desktop header__nav-item">
-            <Link to="/add" className="has-text-dark has-text-weight-semibold">Add product</Link>
-          </li>
-        </ul>
+          <NavLink to="/add" className=" navbar-item has-text-dark has-text-weight-semibold">
+            Add product
+          </NavLink>
+        </div>
       </nav>
     </header>
   );

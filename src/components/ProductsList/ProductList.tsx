@@ -1,15 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable array-callback-return */
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { getProducts } from '../../api/fetchProducts';
-import { set, take } from '../../features/products/productsSlice';
-import { setUseEffectUsed } from '../../features/IsUseEffectUsedSlice';
+import { getProductCategories } from '../../api/fetchProductCategories';
+import { set as setProducts, take as takeProducts } from '../../features/productsSlice';
+import { set as setProductCategories } from '../../features/productCategoriesSlice';
+import { setUseEffectUsed } from '../../features/isUseEffectUsedSlice';
 import classNames from 'classnames';
 
 export const ProductList: React.FC = () => {
   const dispatch = useAppDispatch();
   const { products } = useAppSelector(state => state.products);
+  const { categories } = useAppSelector(state => state.categories);
   const useEffectUsed = useAppSelector(state => state.isUseEffectUsed.isUseEffectUsed);
 
   const [query, setQuery] = useState('');
@@ -18,15 +20,6 @@ export const ProductList: React.FC = () => {
   const [sortOrder, setSortOrder] = useState('asc');
 
   const dataFetchedRef = useRef(false);
-
-  const categories: string[] = [];
-  products.map(product => {
-    if (categories.includes(product.category)) {
-      return;
-    }
-
-    return categories.push(product.category);
-  });
 
   useEffect(() => {
     if (dataFetchedRef.current) {
@@ -45,8 +38,13 @@ export const ProductList: React.FC = () => {
 
     getProducts()
       .then(res => {
-        dispatch(set(res.products));
+        dispatch(setProducts(res.products));
       })
+      .catch(error => error);
+
+    getProductCategories().then(res => {
+      dispatch(setProductCategories(res));
+    })
       .catch(error => error);
   }, [dispatch, useEffectUsed]);
 
@@ -103,7 +101,7 @@ export const ProductList: React.FC = () => {
 
       return (isQueryTitleMatch || isQueryCategoryMatch) && isCategoriesMatch;
     });
-  }, [products, sortType, sortOrder, query, selectedCategories]);
+  }, [products, sortType, sortOrder, query, selectedCategories, categories]);
 
   return (
     <div className="page__products">
@@ -134,7 +132,7 @@ export const ProductList: React.FC = () => {
           All
         </a>
 
-        {categories.map(category => (
+        {categories && categories.map(category => (
           <a
             key={category}
             className={classNames(
@@ -264,7 +262,7 @@ export const ProductList: React.FC = () => {
                 <td className="is-vcentered">
                   <button
                     className="delete"
-                    onClick={() => dispatch(take(product.id))}
+                    onClick={() => dispatch(takeProducts(product.id))}
                   />
                 </td>
               </tr>

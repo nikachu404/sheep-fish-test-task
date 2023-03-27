@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-// Стан Redux, що містить інформацію про використання useEffect в компоненті
+// Стан Redux, що містить інформацію про використання useEffect в компоненті ProductList
 const initialState = {
   isUseEffectUsed: false
 };
