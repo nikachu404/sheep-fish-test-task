@@ -4,11 +4,13 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { getProducts } from '../../api/fetchProducts';
 import { set, take } from '../../features/products/productsSlice';
+import { setUseEffectUsed } from '../../features/IsUseEffectUsedSlice';
 import classNames from 'classnames';
 
 export const ProductList: React.FC = () => {
   const dispatch = useAppDispatch();
   const { products } = useAppSelector(state => state.products);
+  const useEffectUsed = useAppSelector(state => state.isUseEffectUsed.isUseEffectUsed);
 
   const [query, setQuery] = useState('');
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
@@ -31,6 +33,14 @@ export const ProductList: React.FC = () => {
       return;
     }
 
+    if (!useEffectUsed) {
+      dispatch(setUseEffectUsed());
+    }
+
+    if (useEffectUsed) {
+      return;
+    }
+
     dataFetchedRef.current = true;
 
     getProducts()
@@ -38,7 +48,7 @@ export const ProductList: React.FC = () => {
         dispatch(set(res.products));
       })
       .catch(error => error);
-  }, []);
+  }, [dispatch, useEffectUsed]);
 
   const onSelectCategoryFilter = (category: string): void => {
     setSelectedCategories((prev) => {
@@ -97,17 +107,19 @@ export const ProductList: React.FC = () => {
 
   return (
     <div className="page__products">
-      <input
-        type="text"
-        className="input"
-        placeholder="Search"
-        value={query}
-        onChange={(event) => {
-          setQuery(event.target.value);
-        }}
-      />
+      <div className="field">
+        <input
+          type="text"
+          className="input"
+          placeholder="Search"
+          value={query}
+          onChange={(event) => {
+            setQuery(event.target.value);
+          }}
+        />
+      </div>
 
-      <div className="is-flex is-flex-wrap-wrap">
+      <div className=" field is-flex is-flex-wrap-wrap">
         <a
           href="#/"
           className={classNames(
@@ -146,6 +158,9 @@ export const ProductList: React.FC = () => {
           <thead>
             <tr>
               <th
+                className={classNames(
+                  { 'is-underlined': sortType === 'id' }
+                )}
                 onClick={() => {
                   setSortType('id');
                   setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
@@ -155,6 +170,9 @@ export const ProductList: React.FC = () => {
               </th>
 
               <th
+                className={classNames(
+                  { 'is-underlined': sortType === 'title' }
+                )}
                 onClick={() => {
                   setSortType('title');
                   setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
@@ -164,6 +182,9 @@ export const ProductList: React.FC = () => {
               </th>
 
               <th
+                className={classNames(
+                  { 'is-underlined': sortType === 'description' }
+                )}
                 onClick={() => {
                   setSortType('description');
                   setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
@@ -173,6 +194,9 @@ export const ProductList: React.FC = () => {
               </th>
 
               <th
+                className={classNames(
+                  { 'is-underlined': sortType === 'price' }
+                )}
                 onClick={() => {
                   setSortType('price');
                   setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
@@ -184,6 +208,9 @@ export const ProductList: React.FC = () => {
               <th>Photo</th>
 
               <th
+                className={classNames(
+                  { 'is-underlined': sortType === 'rating' }
+                )}
                 onClick={() => {
                   setSortType('rating');
                   setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
@@ -193,6 +220,9 @@ export const ProductList: React.FC = () => {
               </th>
 
               <th
+                className={classNames(
+                  { 'is-underlined': sortType === 'stock' }
+                )}
                 onClick={() => {
                   setSortType('stock');
                   setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
@@ -202,6 +232,9 @@ export const ProductList: React.FC = () => {
               </th>
 
               <th
+                className={classNames(
+                  { 'is-underlined': sortType === 'category' }
+                )}
                 onClick={() => {
                   setSortType('category');
                   setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
@@ -214,10 +247,10 @@ export const ProductList: React.FC = () => {
           <tbody>
             {visibleProducts.length > 0 && visibleProducts.map(product => (
               <tr key={product.id}>
-                <td className="has-text-weight-bold">{product.id}</td>
-                <td className="has-text-link has-text-weight-bold is-clickable">{product.title}</td>
-                <td className="descripton">{product.description}</td>
-                <td>{product.price}</td>
+                <td className="has-text-weight-bold is-vcentered">{product.id}</td>
+                <td className="has-text-link has-text-weight-bold is-clickable is-vcentered">{product.title}</td>
+                <td className="descripton is-vcentered">{product.description}</td>
+                <td className="is-vcentered">{product.price}</td>
                 <td>
                   <img
                     src={product.thumbnail}
@@ -225,10 +258,10 @@ export const ProductList: React.FC = () => {
                     className="photo"
                   />
                 </td>
-                <td>{product.rating}</td>
-                <td>{product.stock}</td>
-                <td>{product.category}</td>
-                <td>
+                <td className="is-vcentered">{product.rating}</td>
+                <td className="is-vcentered">{product.stock}</td>
+                <td className="is-vcentered">{product.category}</td>
+                <td className="is-vcentered">
                   <button
                     className="delete"
                     onClick={() => dispatch(take(product.id))}

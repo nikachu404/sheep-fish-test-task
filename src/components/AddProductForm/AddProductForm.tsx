@@ -48,8 +48,6 @@ export const AddProductForm: React.FC = () => {
   return (
     <div className="page__add-form">
     <div className="box">
-      <h2>Add new product</h2>
-
       <form
         onSubmit={handleSubmit}>
         <div className="field">
