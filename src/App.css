@@ -5,6 +5,7 @@
 .content {
   display: flex;
   flex-direction: row;
+  gap: 20px;
 }
 
 .products {
@@ -13,13 +14,4 @@
 
 .add {
   width: 30%;
-}
-
-
-#customers td, #customers th {
-  text-align: center !important;
-}
-
-.descripton {
-  text-align: left !important;
 }

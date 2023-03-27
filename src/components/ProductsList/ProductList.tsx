@@ -1,8 +1,8 @@
 /* eslint-disable array-callback-return */
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { getAllProducts } from '../../api/fetchProducts';
-import { set } from '../../features/products/productsSlice';
+import { getProducts } from '../../api/fetchProducts';
+import { set, take } from '../../features/products/productsSlice';
 import classNames from 'classnames';
 
 export const ProductList: React.FC = () => {
@@ -10,9 +10,9 @@ export const ProductList: React.FC = () => {
   const { products } = useAppSelector(state => state.products);
 
   const [query, setQuery] = useState('');
-  const [
-    selectedCategories, setSelectedCategories
-  ] = useState<string[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [sortType, setSortType] = useState('');
+  const [sortOrder, setSortOrder] = useState('asc');
 
   const dataFetchedRef = useRef(false);
 
@@ -32,10 +32,9 @@ export const ProductList: React.FC = () => {
 
     dataFetchedRef.current = true;
 
-    getAllProducts()
+    getProducts()
       .then(res => {
         dispatch(set(res.products));
-        console.log('aaa');
       })
       .catch(error => error);
   }, []);
@@ -50,25 +49,50 @@ export const ProductList: React.FC = () => {
     });
   };
 
-  const visibleProducts = products.filter(product => {
-    const normalizedTitle = product.title.toLowerCase();
-    const normalizedCategory = product.category.toLowerCase();
-    const normalizedQuery = query.toLowerCase().trim();
+  const visibleProducts = useMemo(() => {
+    const sortedProducts = [...products];
 
-    const isQueryTitleMatch = query
-      ? normalizedTitle.includes(normalizedQuery)
-      : true;
+    switch (sortType) {
+      case 'title':
+      case 'description':
+      case 'category':
+        sortedProducts.sort((a, b) => a[sortType].localeCompare(b[sortType]));
+        break;
 
-    const isQueryCategoryMatch = query
-      ? normalizedCategory.includes(normalizedQuery)
-      : true;
+      case 'price':
+      case 'rating':
+      case 'stock':
+        sortedProducts.sort((a, b) => a[sortType] - b[sortType]);
+        break;
 
-    const isCategoriesMatch = selectedCategories.length
-      ? selectedCategories.includes(product.category)
-      : true;
+      default:
+        break;
+    }
 
-    return (isQueryTitleMatch || isQueryCategoryMatch) && isCategoriesMatch;
-  });
+    if (sortOrder === 'desc') {
+      sortedProducts.reverse();
+    }
+
+    return sortedProducts.filter(product => {
+      const normalizedTitle = product.title.toLowerCase();
+      const normalizedCategory = product.category.toLowerCase();
+      const normalizedQuery = query.toLowerCase().trim();
+
+      const isQueryTitleMatch = query
+        ? normalizedTitle.includes(normalizedQuery)
+        : true;
+
+      const isQueryCategoryMatch = query
+        ? normalizedCategory.includes(normalizedQuery)
+        : true;
+
+      const isCategoriesMatch = selectedCategories.length
+        ? selectedCategories.includes(product.category)
+        : true;
+
+      return (isQueryTitleMatch || isQueryCategoryMatch) && isCategoriesMatch;
+    });
+  }, [products, sortType, sortOrder, query, selectedCategories]);
 
   return (
     <div className="products">
@@ -119,32 +143,70 @@ export const ProductList: React.FC = () => {
         <table id="customers" className="table is-striped is-narrow is-fullwidth">
           <thead>
             <tr>
-              <th>
-                <span className="is-flex is-flex-wrap-nowrap is-justify-content-center">
-                  <div className="is-inline">📎ID</div>
-                  <a href="#/">
-                    <span className="icon">
-                      <i className="fas fa-sort"></i>
-                    </span>
-                  </a>
-                </span>
+              <th
+                onClick={() => {
+                  setSortType('id');
+                  setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+                }}
+              >
+                Id{sortOrder === 'asc' ? '↑' : '↓'}
               </th>
-              <th>
-                <span className="is-flex is-flex-wrap-nowrap is-justify-content-center">
-                  📌Name
-                  <a href="#/">
-                    <span className="icon">
-                      <i className="fas fa-sort"></i>
-                    </span>
-                  </a>
-                </span>
+
+              <th
+                onClick={() => {
+                  setSortType('title');
+                  setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+                }}
+              >
+                Name{sortOrder === 'asc' ? '↑' : '↓'}
               </th>
-              <th>📋Description</th>
-              <th>💸Price</th>
-              <th>📷Photo</th>
-              <th>✨Rating</th>
-              <th>🛒Stock</th>
-              <th>🔍Category</th>
+
+              <th
+                onClick={() => {
+                  setSortType('description');
+                  setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+                }}
+              >
+                Description{sortOrder === 'asc' ? '↑' : '↓'}
+              </th>
+
+              <th
+                onClick={() => {
+                  setSortType('price');
+                  setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+                }}
+              >
+                Price{sortOrder === 'asc' ? '↑' : '↓'}
+              </th>
+
+              <th>Photo</th>
+
+              <th
+                onClick={() => {
+                  setSortType('rating');
+                  setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+                }}
+              >
+                Rating{sortOrder === 'asc' ? '↑' : '↓'}
+              </th>
+
+              <th
+                onClick={() => {
+                  setSortType('stock');
+                  setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+                }}
+              >
+                Stock{sortOrder === 'asc' ? '↑' : '↓'}
+              </th>
+
+              <th
+                onClick={() => {
+                  setSortType('category');
+                  setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+                }}
+              >
+                Category{sortOrder === 'asc' ? '↑' : '↓'}
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -164,6 +226,12 @@ export const ProductList: React.FC = () => {
                 <td>{product.rating}</td>
                 <td>{product.stock}</td>
                 <td>{product.category}</td>
+                <td>
+                  <button
+                    className="delete"
+                    onClick={() => dispatch(take(product.id))}
+                  />
+                </td>
               </tr>
             ))
             }

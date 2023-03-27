@@ -1,13 +1,37 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import React from 'react';
 import './App.css';
 import { useFormik } from 'formik';
 import { basicSchema } from './schemas';
 import { ProductList } from './components/ProductsList/ProductList';
 import classNames from 'classnames';
+import { addProduct } from './api/fetchProducts';
+import { useAppDispatch } from './app/hooks';
+import { add } from './features/products/productsSlice';
 
 const App: React.FC = () => {
+  const dispatch = useAppDispatch();
+
   const onSubmit: () => void = () => {
-    console.log('submitted');
+    const requestBody = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        title: values.title,
+        description: values.description,
+        price: values.price,
+        thumbnail: values.thumbnail,
+        rating: values.rating,
+        stock: values.stock,
+        category: values.category
+      })
+    };
+
+    addProduct(requestBody)
+      .then(newProduct => {
+        dispatch(add(newProduct));
+      })
+      .catch(error => error);
   };
 
   const { values, handleChange, handleSubmit, handleBlur, touched, errors } = useFormik({
@@ -23,8 +47,6 @@ const App: React.FC = () => {
     validationSchema: basicSchema,
     onSubmit
   });
-
-  console.log(errors);
 
   return (
     <div className="App">
@@ -107,7 +129,7 @@ const App: React.FC = () => {
               </div>
 
               <div className="field">
-                <label className="label">Thumbnail</label>
+                <label className="label">Thumbnail (path)</label>
                 <div className="control">
                   <input
                     className={classNames(
