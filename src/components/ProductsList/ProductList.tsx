@@ -8,7 +8,8 @@ import { set as setProductCategories } from '../../features/productCategoriesSli
 import { setUseEffectUsed } from '../../features/isUseEffectUsedSlice';
 import classNames from 'classnames';
 
-import './ProductList.scss';
+import './ProductList.css';
+import { Loader } from '../Loader/Loader';
 
 export const ProductList: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -139,9 +140,7 @@ export const ProductList: React.FC = () => {
 
       {isLoading
         ? (
-          <div className="loader-wrapper is-centered">
-            <div className="loader"></div>
-          </div>
+          <Loader />
           )
         : (
           <>
@@ -295,7 +294,7 @@ export const ProductList: React.FC = () => {
                           <td className="is-vcentered">{product.rating}</td>
                           <td className="is-vcentered">{product.stock}</td>
                           <td className="is-vcentered">{product.category}</td>
-                          <td className="is-vcentered">
+                          <td className="is-vcentered is-centered">
                             <button
                               className="delete"
                               onClick={() => dispatch(takeProducts(product.id))}
