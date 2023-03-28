@@ -12,9 +12,7 @@
     height: 60px;
   }
 
-  &__nav-list {
-    display: flex;
-    flex-direction: row;
-    gap: 20px;
+  &--is-active {
+    text-decoration: underline;
   }
 }

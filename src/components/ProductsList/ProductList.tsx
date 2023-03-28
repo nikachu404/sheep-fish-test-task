@@ -116,7 +116,7 @@ export const ProductList: React.FC = () => {
     <div className="page__products">
       <div className="field">
         <h1
-        className="has-text-centered
+          className="has-text-centered
           has-text-light
           is-size-3
           has-text-weight-semibold"
@@ -184,6 +184,7 @@ export const ProductList: React.FC = () => {
                 <tr>
                   <th
                     className={classNames(
+                      'is-hoverable',
                       { 'is-underlined': sortType === 'id' }
                     )}
                     onClick={() => {
@@ -191,7 +192,7 @@ export const ProductList: React.FC = () => {
                       setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
                     }}
                   >
-                    Id{sortOrder === 'asc' ? '↑' : '↓'}
+                    Id{sortType === 'id' && (sortOrder === 'asc' ? '↑' : '↓')}
                   </th>
 
                   <th
@@ -203,7 +204,7 @@ export const ProductList: React.FC = () => {
                       setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
                     }}
                   >
-                    Name{sortOrder === 'asc' ? '↑' : '↓'}
+                    Name{sortType === 'title' && (sortOrder === 'asc' ? '↑' : '↓')}
                   </th>
 
                   <th
@@ -215,7 +216,7 @@ export const ProductList: React.FC = () => {
                       setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
                     }}
                   >
-                    Description{sortOrder === 'asc' ? '↑' : '↓'}
+                    Description{sortType === 'description' && (sortOrder === 'asc' ? '↑' : '↓')}
                   </th>
 
                   <th
@@ -227,7 +228,7 @@ export const ProductList: React.FC = () => {
                       setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
                     }}
                   >
-                    Price{sortOrder === 'asc' ? '↑' : '↓'}
+                    Price{sortType === 'price' && (sortOrder === 'asc' ? '↑' : '↓')}
                   </th>
 
                   <th>Photo</th>
@@ -241,7 +242,7 @@ export const ProductList: React.FC = () => {
                       setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
                     }}
                   >
-                    Rating{sortOrder === 'asc' ? '↑' : '↓'}
+                    Rating{sortType === 'rating' && (sortOrder === 'asc' ? '↑' : '↓')}
                   </th>
 
                   <th
@@ -253,7 +254,7 @@ export const ProductList: React.FC = () => {
                       setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
                     }}
                   >
-                    Stock{sortOrder === 'asc' ? '↑' : '↓'}
+                    Stock{sortType === 'stock' && (sortOrder === 'asc' ? '↑' : '↓')}
                   </th>
 
                   <th
@@ -265,7 +266,7 @@ export const ProductList: React.FC = () => {
                       setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
                     }}
                   >
-                    Category{sortOrder === 'asc' ? '↑' : '↓'}
+                    Category{sortType === 'category' && (sortOrder === 'asc' ? '↑' : '↓')}
                   </th>
                 </tr>
               </thead>
@@ -273,7 +274,7 @@ export const ProductList: React.FC = () => {
                 {visibleProducts.length > 0 && visibleProducts.map(product => (
                   <tr key={product.id}>
                     <td className="has-text-weight-bold is-vcentered">{product.id}</td>
-                    <td className="has-text-link has-text-weight-bold is-clickable is-vcentered">{product.title}</td>
+                    <td className="has-text-link has-text-weight-bold is-vcentered">{product.title}</td>
                     <td className="descripton is-vcentered">{product.description}</td>
                     <td className="is-vcentered">{product.price}</td>
                     <td>

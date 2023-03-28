@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import React, { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import { basicSchema } from '../../schemas';
 import classNames from 'classnames';
@@ -7,10 +8,12 @@ import { addProduct } from '../../api/fetchProducts';
 import { add } from '../../features/productsSlice';
 import { getProductCategories } from '../../api/fetchProductCategories';
 import { set as setProductCategories } from '../../features/productCategoriesSlice';
+import './AddProductForm.scss';
 
 export const AddProductForm: React.FC = () => {
   const dispatch = useAppDispatch();
   const { categories } = useAppSelector(state => state.categories);
+  const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     getProductCategories().then(res => {
@@ -38,6 +41,10 @@ export const AddProductForm: React.FC = () => {
       .then(newProduct => {
         dispatch(add(newProduct));
         resetForm();
+        setSuccess(true);
+        setTimeout(() => {
+          setSuccess(false);
+        }, 3000);
       })
       .catch(error => error);
   };
@@ -60,8 +67,7 @@ export const AddProductForm: React.FC = () => {
     <div className="page__add-form">
       <div className="field">
         <h1
-          className="
-          has-text-centered
+          className="has-text-centered
           has-text-light
           is-size-3
           has-text-weight-semibold"
@@ -230,17 +236,20 @@ export const AddProductForm: React.FC = () => {
           <div className="field has-text-centered">
             <button type="submit" className="button is-link">
               Add product
+              {success && (
+                <article className={classNames(
+                  'message is-success',
+                  { 'message__is-success': success }
+                )}>
+                  <div className="message-header">
+                    <p>New product has been added! :)</p>
+                  </div>
+                  <div className="message-body">
+                    Go to the &quot;Products&quot; page to see the added product
+                  </div>
+                </article>
+              )}
             </button>
-
-            <article className="message is-success">
-              <div className="message-header">
-                <p>New product has been added!</p>
-                <button className="delete" aria-label="delete"></button>
-              </div>
-              <div className="message-body">
-                Go to the &quot;Products&quot; page to see the added product
-              </div>
-            </article>
           </div>
         </form>
       </div>
