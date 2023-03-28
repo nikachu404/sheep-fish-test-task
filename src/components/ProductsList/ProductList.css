@@ -1,0 +1,8 @@
+table {
+  table-layout: fixed;
+  width: auto;
+}
+
+th, td {
+  text-align: center !important;
+}

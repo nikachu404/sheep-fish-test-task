@@ -88,6 +88,7 @@ export const AddProductForm: React.FC = () => {
                 )}
                 type="text"
                 name="title"
+                placeholder="Enter text"
                 value={values.title}
                 onBlur={handleBlur}
                 onChange={handleChange}
@@ -110,6 +111,7 @@ export const AddProductForm: React.FC = () => {
                 )}
                 type="text"
                 name="description"
+                placeholder="Enter text"
                 value={values.description}
                 onBlur={handleBlur}
                 onChange={handleChange}
@@ -132,6 +134,7 @@ export const AddProductForm: React.FC = () => {
                 )}
                 type="number"
                 name="price"
+                placeholder="Enter number"
                 value={values.price}
                 onBlur={handleBlur}
                 onChange={handleChange}
@@ -154,6 +157,7 @@ export const AddProductForm: React.FC = () => {
                 )}
                 type="text"
                 name="thumbnail"
+                placeholder="Enter text"
                 value={values.thumbnail}
                 onBlur={handleBlur}
                 onChange={handleChange}
@@ -176,6 +180,7 @@ export const AddProductForm: React.FC = () => {
                 )}
                 type="number"
                 name="rating"
+                placeholder="Enter number"
                 value={values.rating}
                 onBlur={handleBlur}
                 onChange={handleChange}
@@ -198,6 +203,7 @@ export const AddProductForm: React.FC = () => {
                 )}
                 type="number"
                 name="stock"
+                placeholder="Enter number"
                 value={values.stock}
                 onBlur={handleBlur}
                 onChange={handleChange}
