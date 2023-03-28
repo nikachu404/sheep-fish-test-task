@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/sheep-fish-test-task/static/css/main.b39f5f3a.css",
-    "main.js": "/sheep-fish-test-task/static/js/main.f6b8e389.js",
+    "main.css": "/sheep-fish-test-task/static/css/main.16aa452b.css",
+    "main.js": "/sheep-fish-test-task/static/js/main.3aeb4ff9.js",
     "static/media/logo.png": "/sheep-fish-test-task/static/media/logo.dea96814b3526b490341.png",
     "index.html": "/sheep-fish-test-task/index.html",
-    "main.b39f5f3a.css.map": "/sheep-fish-test-task/static/css/main.b39f5f3a.css.map",
-    "main.f6b8e389.js.map": "/sheep-fish-test-task/static/js/main.f6b8e389.js.map"
+    "main.16aa452b.css.map": "/sheep-fish-test-task/static/css/main.16aa452b.css.map",
+    "main.3aeb4ff9.js.map": "/sheep-fish-test-task/static/js/main.3aeb4ff9.js.map"
   },
   "entrypoints": [
-    "static/css/main.b39f5f3a.css",
-    "static/js/main.f6b8e389.js"
+    "static/css/main.16aa452b.css",
+    "static/js/main.3aeb4ff9.js"
   ]
 }
