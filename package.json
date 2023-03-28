@@ -1,5 +1,6 @@
 {
-  "name": "my-app",
+  "name": "sheep-fish-test-task",
+  "homepage": "https://nikachu404.github.io/sheep-fish-test-task",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -25,6 +26,8 @@
     "yup": "^1.0.2"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
