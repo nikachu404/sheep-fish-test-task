@@ -137,40 +137,6 @@ export const ProductList: React.FC = () => {
         />
       </div>
 
-      <div className=" field is-flex is-flex-wrap-wrap">
-        <a
-          href="#/"
-          className={classNames(
-            'button mr-6 my-1',
-            { 'is-dark': selectedCategories.length > 0 },
-            { 'is-success': selectedCategories.length === 0 }
-          )}
-          onClick={() => {
-            setSelectedCategories([]);
-          }}
-        >
-          All
-        </a>
-
-        {categories && categories.map(category => (
-          <a
-            key={category}
-            className={classNames(
-              'button mr-2 my-1',
-              {
-                'is-info': selectedCategories.includes(category)
-              }
-            )}
-            href="#/"
-            onClick={() => {
-              onSelectCategoryFilter(category);
-            }}
-          >
-            {category}
-          </a>
-        ))}
-      </div>
-
       {isLoading
         ? (
           <div className="loader-wrapper is-centered">
@@ -178,127 +144,170 @@ export const ProductList: React.FC = () => {
           </div>
           )
         : (
-          <div className="box table-container">
-            <table className="table is-striped is-narrow is-fullwidth">
-              <thead>
-                <tr>
-                  <th
-                    className={classNames(
-                      'is-hoverable',
-                      { 'is-underlined': sortType === 'id' }
-                    )}
-                    onClick={() => {
-                      setSortType('id');
-                      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
-                    }}
-                  >
-                    Id{sortType === 'id' && (sortOrder === 'asc' ? '↑' : '↓')}
-                  </th>
+          <>
+            <div className=" field is-flex is-flex-wrap-wrap">
+              <a
+                href="#/"
+                className={classNames(
+                  'button mr-6 my-1',
+                  { 'is-dark': selectedCategories.length > 0 },
+                  { 'is-success': selectedCategories.length === 0 }
+                )}
+                onClick={() => {
+                  setSelectedCategories([]);
+                }}
+              >
+                All
+              </a>
 
-                  <th
-                    className={classNames(
-                      { 'is-underlined': sortType === 'title' }
-                    )}
-                    onClick={() => {
-                      setSortType('title');
-                      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
-                    }}
-                  >
-                    Name{sortType === 'title' && (sortOrder === 'asc' ? '↑' : '↓')}
-                  </th>
+              {categories && categories.map(category => (
+                <a
+                  key={category}
+                  className={classNames(
+                    'button mr-2 my-1',
+                    {
+                      'is-info': selectedCategories.includes(category)
+                    }
+                  )}
+                  href="#/"
+                  onClick={() => {
+                    onSelectCategoryFilter(category);
+                  }}
+                >
+                  {category}
+                </a>
+              ))}
+            </div>
+            {visibleProducts.length
+              ? (
+                <div className="box table-container">
+                  <table className="table is-striped is-narrow is-fullwidth">
+                    <thead>
+                      <tr>
+                        <th
+                          className={classNames(
+                            'is-hoverable',
+                            { 'is-underlined': sortType === 'id' }
+                          )}
+                          onClick={() => {
+                            setSortType('id');
+                            setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+                          }}
+                        >
+                          Id{sortType === 'id' && (sortOrder === 'asc' ? '↑' : '↓')}
+                        </th>
 
-                  <th
-                    className={classNames(
-                      { 'is-underlined': sortType === 'description' }
-                    )}
-                    onClick={() => {
-                      setSortType('description');
-                      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
-                    }}
-                  >
-                    Description{sortType === 'description' && (sortOrder === 'asc' ? '↑' : '↓')}
-                  </th>
+                        <th
+                          className={classNames(
+                            { 'is-underlined': sortType === 'title' }
+                          )}
+                          onClick={() => {
+                            setSortType('title');
+                            setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+                          }}
+                        >
+                          Name{sortType === 'title' && (sortOrder === 'asc' ? '↑' : '↓')}
+                        </th>
 
-                  <th
-                    className={classNames(
-                      { 'is-underlined': sortType === 'price' }
-                    )}
-                    onClick={() => {
-                      setSortType('price');
-                      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
-                    }}
-                  >
-                    Price{sortType === 'price' && (sortOrder === 'asc' ? '↑' : '↓')}
-                  </th>
+                        <th
+                          className={classNames(
+                            { 'is-underlined': sortType === 'description' }
+                          )}
+                          onClick={() => {
+                            setSortType('description');
+                            setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+                          }}
+                        >
+                          Description{sortType === 'description' && (sortOrder === 'asc' ? '↑' : '↓')}
+                        </th>
 
-                  <th>Photo</th>
+                        <th
+                          className={classNames(
+                            { 'is-underlined': sortType === 'price' }
+                          )}
+                          onClick={() => {
+                            setSortType('price');
+                            setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+                          }}
+                        >
+                          Price{sortType === 'price' && (sortOrder === 'asc' ? '↑' : '↓')}
+                        </th>
 
-                  <th
-                    className={classNames(
-                      { 'is-underlined': sortType === 'rating' }
-                    )}
-                    onClick={() => {
-                      setSortType('rating');
-                      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
-                    }}
-                  >
-                    Rating{sortType === 'rating' && (sortOrder === 'asc' ? '↑' : '↓')}
-                  </th>
+                        <th>Photo</th>
 
-                  <th
-                    className={classNames(
-                      { 'is-underlined': sortType === 'stock' }
-                    )}
-                    onClick={() => {
-                      setSortType('stock');
-                      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
-                    }}
-                  >
-                    Stock{sortType === 'stock' && (sortOrder === 'asc' ? '↑' : '↓')}
-                  </th>
+                        <th
+                          className={classNames(
+                            { 'is-underlined': sortType === 'rating' }
+                          )}
+                          onClick={() => {
+                            setSortType('rating');
+                            setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+                          }}
+                        >
+                          Rating{sortType === 'rating' && (sortOrder === 'asc' ? '↑' : '↓')}
+                        </th>
 
-                  <th
-                    className={classNames(
-                      { 'is-underlined': sortType === 'category' }
-                    )}
-                    onClick={() => {
-                      setSortType('category');
-                      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
-                    }}
-                  >
-                    Category{sortType === 'category' && (sortOrder === 'asc' ? '↑' : '↓')}
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {visibleProducts.length > 0 && visibleProducts.map(product => (
-                  <tr key={product.id}>
-                    <td className="has-text-weight-bold is-vcentered">{product.id}</td>
-                    <td className="has-text-link has-text-weight-bold is-vcentered">{product.title}</td>
-                    <td className="descripton is-vcentered">{product.description}</td>
-                    <td className="is-vcentered">{product.price}</td>
-                    <td>
-                      <img
-                        src={product.thumbnail}
-                        alt={product.title}
-                        className="photo"
-                      />
-                    </td>
-                    <td className="is-vcentered">{product.rating}</td>
-                    <td className="is-vcentered">{product.stock}</td>
-                    <td className="is-vcentered">{product.category}</td>
-                    <td className="is-vcentered">
-                      <button
-                        className="delete"
-                        onClick={() => dispatch(takeProducts(product.id))}
-                      />
-                    </td>
-                  </tr>
-                ))
-                }
-              </tbody>
-            </table>
-          </div>
+                        <th
+                          className={classNames(
+                            { 'is-underlined': sortType === 'stock' }
+                          )}
+                          onClick={() => {
+                            setSortType('stock');
+                            setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+                          }}
+                        >
+                          Stock{sortType === 'stock' && (sortOrder === 'asc' ? '↑' : '↓')}
+                        </th>
+
+                        <th
+                          className={classNames(
+                            { 'is-underlined': sortType === 'category' }
+                          )}
+                          onClick={() => {
+                            setSortType('category');
+                            setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+                          }}
+                        >
+                          Category{sortType === 'category' && (sortOrder === 'asc' ? '↑' : '↓')}
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {visibleProducts.map(product => (
+                        <tr key={product.id}>
+                          <td className="has-text-weight-bold is-vcentered">{product.id}</td>
+                          <td className="has-text-link has-text-weight-bold is-vcentered">{product.title}</td>
+                          <td className="descripton is-vcentered">{product.description}</td>
+                          <td className="is-vcentered">{product.price}</td>
+                          <td>
+                            <img
+                              src={product.thumbnail}
+                              alt={product.title}
+                              className="photo"
+                            />
+                          </td>
+                          <td className="is-vcentered">{product.rating}</td>
+                          <td className="is-vcentered">{product.stock}</td>
+                          <td className="is-vcentered">{product.category}</td>
+                          <td className="is-vcentered">
+                            <button
+                              className="delete"
+                              onClick={() => dispatch(takeProducts(product.id))}
+                            />
+                          </td>
+                        </tr>
+                      ))
+                      }
+                    </tbody>
+                  </table>
+                </div>
+                )
+              : (
+                <div className="field">
+                  <h2 className="has-text-light  has-text-weight-semibold has-text-centered is-size-4">No products ;(</h2>
+                </div>
+                )}
+          </>
           )}
     </div>
   );
