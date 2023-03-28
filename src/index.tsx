@@ -4,8 +4,7 @@ import { createRoot } from 'react-dom/client';
 import {
   HashRouter,
   Routes,
-  Route,
-  Navigate
+  Route
 } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import App from './App';
@@ -24,9 +23,6 @@ root.render(
         <Routes>
           <Route path="/" element={<App />}>
             <Route index element={<ProductList />} />
-
-            <Route path="products" element={<Navigate to="/" replace />} />
-
             <Route path="add" element={<AddProductForm />} />
           </Route>
         </Routes>
