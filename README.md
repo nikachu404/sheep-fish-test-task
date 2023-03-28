@@ -44,6 +44,11 @@ ___
  ![](https://github.com/nikachu404/sheep-fish-test-task/blob/main/src/gifs/Filtration.gif)
   ___
   
+  - Видалення
+ 
+ ![](https://github.com/nikachu404/sheep-fish-test-task/blob/main/src/gifs/Deleting.gif)
+  ___
+  
   - Валідація
  
  ![](https://github.com/nikachu404/sheep-fish-test-task/blob/main/src/gifs/Validation.gif)
