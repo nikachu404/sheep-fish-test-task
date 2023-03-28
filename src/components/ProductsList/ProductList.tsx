@@ -186,7 +186,7 @@ export const ProductList: React.FC = () => {
                       <tr>
                         <th
                           className={classNames(
-                            'is-hoverable',
+                            'is-clickable',
                             { 'is-underlined': sortType === 'id' }
                           )}
                           onClick={() => {
@@ -199,6 +199,7 @@ export const ProductList: React.FC = () => {
 
                         <th
                           className={classNames(
+                            'is-clickable',
                             { 'is-underlined': sortType === 'title' }
                           )}
                           onClick={() => {
@@ -211,6 +212,7 @@ export const ProductList: React.FC = () => {
 
                         <th
                           className={classNames(
+                            'is-clickable',
                             { 'is-underlined': sortType === 'description' }
                           )}
                           onClick={() => {
@@ -223,6 +225,7 @@ export const ProductList: React.FC = () => {
 
                         <th
                           className={classNames(
+                            'is-clickable',
                             { 'is-underlined': sortType === 'price' }
                           )}
                           onClick={() => {
@@ -237,6 +240,7 @@ export const ProductList: React.FC = () => {
 
                         <th
                           className={classNames(
+                            'is-clickable',
                             { 'is-underlined': sortType === 'rating' }
                           )}
                           onClick={() => {
@@ -249,6 +253,7 @@ export const ProductList: React.FC = () => {
 
                         <th
                           className={classNames(
+                            'is-clickable',
                             { 'is-underlined': sortType === 'stock' }
                           )}
                           onClick={() => {
@@ -261,6 +266,7 @@ export const ProductList: React.FC = () => {
 
                         <th
                           className={classNames(
+                            'is-clickable',
                             { 'is-underlined': sortType === 'category' }
                           )}
                           onClick={() => {
