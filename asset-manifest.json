@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/sheep-fish-test-task/static/css/main.b39f5f3a.css",
+    "main.js": "/sheep-fish-test-task/static/js/main.02a4b119.js",
+    "static/media/logo.png": "/sheep-fish-test-task/static/media/logo.dea96814b3526b490341.png",
+    "index.html": "/sheep-fish-test-task/index.html",
+    "main.b39f5f3a.css.map": "/sheep-fish-test-task/static/css/main.b39f5f3a.css.map",
+    "main.02a4b119.js.map": "/sheep-fish-test-task/static/js/main.02a4b119.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.b39f5f3a.css",
+    "static/js/main.02a4b119.js"
+  ]
+}
